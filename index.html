@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quran Sura Introduction Viewer | Dorar.net</title>
+    <meta name="description"
+        content="Browse Introduction of Sura from Dorar.net Tafseer — a beautiful viewer for all 114 Quranic Sura introductions." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- Animated background orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M32 4C16.536 4 4 16.536 4 32s12.536 28 28 28 28-12.536 28-28S47.464 4 32 4z"
+                        fill="url(#iconGrad)" opacity="0.15" />
+                    <path d="M20 18h-4a2 2 0 00-2 2v24a2 2 0 002 2h24a2 2 0 002-2v-4" stroke="url(#iconGrad)"
+                        stroke-width="2.5" stroke-linecap="round" />
+                    <path d="M26 14h18a2 2 0 012 2v18a2 2 0 01-2 2H26a2 2 0 01-2-2V16a2 2 0 012-2z"
+                        fill="url(#iconGrad)" opacity="0.3" />
+                    <path d="M26 14h18a2 2 0 012 2v18a2 2 0 01-2 2H26a2 2 0 01-2-2V16a2 2 0 012-2z"
+                        stroke="url(#iconGrad)" stroke-width="2.5" />
+                    <path d="M30 22h10M30 27h10M30 32h6" stroke="url(#iconGrad)" stroke-width="2"
+                        stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="iconGrad" x1="10" y1="10" x2="54" y2="54" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#a78bfa" />
+                            <stop offset="1" stop-color="#38bdf8" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+            </div>
+            <div class="header-text">
+                <h1>Quran <span class="gradient-text">Introduction</span> Viewer</h1>
+                <p class="header-subtitle">Introduction of Sura · Dorar.net Tafseer</p>
+            </div>
+        </header>
+
+        <!-- Controls Card -->
+        <div class="controls-card">
+            <div class="select-wrapper">
+                <label for="sura-select" class="select-label">Select Sura</label>
+                <div class="custom-select-wrap">
+                    <select id="sura-select" aria-label="Choose a Sura">
+                        <option value="" disabled selected>— Choose a Sura —</option>
+                    </select>
+                    <span class="select-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <button id="fetch-btn" class="fetch-btn" disabled>
+                <span class="btn-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </svg>
+                </span>
+                <span class="btn-text">Show Introduction</span>
+            </button>
+        </div>
+
+        <!-- Result Area -->
+        <div id="result-area" class="result-area" role="region" aria-live="polite" aria-label="Introduction content">
+            <!-- Placeholder state -->
+            <div class="placeholder-state" id="placeholder-state">
+                <div class="placeholder-icon" aria-hidden="true">
+                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="40" cy="40" r="36" fill="url(#plGrad)" opacity="0.1" />
+                        <path d="M28 24h-6a2 2 0 00-2 2v28a2 2 0 002 2h28a2 2 0 002-2v-6" stroke="url(#plGrad)"
+                            stroke-width="2.5" stroke-linecap="round" />
+                        <rect x="32" y="18" width="22" height="24" rx="3" fill="url(#plGrad)" opacity="0.2"
+                            stroke="url(#plGrad)" stroke-width="2.5" />
+                        <path d="M38 28h10M38 34h10M38 40h6" stroke="url(#plGrad)" stroke-width="2"
+                            stroke-linecap="round" />
+                        <defs>
+                            <linearGradient id="plGrad" x1="20" y1="20" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#a78bfa" />
+                                <stop offset="1" stop-color="#38bdf8" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <p class="placeholder-text">Select a Sura above and click <strong>Show Introduction</strong> to view its
+                    introduction.</p>
+            </div>
+
+            <!-- Loading state -->
+            <div class="loading-state" id="loading-state" hidden>
+                <div class="spinner" aria-hidden="true">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-ring spinner-ring-2"></div>
+                </div>
+                <p class="loading-text">Fetching Introduction…</p>
+            </div>
+
+            <!-- Error state -->
+            <div class="error-state" id="error-state" hidden>
+                <div class="error-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                    </svg>
+                </div>
+                <p class="error-text" id="error-text">Unable to fetch the introduction. Please try again.</p>
+                <button class="retry-btn" id="retry-btn">Retry</button>
+            </div>
+
+            <!-- Content state -->
+            <div class="content-area" id="content-area" hidden>
+                <div class="content-header">
+                    <div class="content-badge" id="content-sura-number"></div>
+                    <div class="content-titles">
+                        <h2 class="content-sura-name" id="content-sura-name"></h2>
+                        <span class="content-sura-arabic" id="content-sura-arabic"></span>
+                    </div>
+                    <div class="content-actions">
+                        <button class="action-btn" id="copy-btn" title="Copy text" aria-label="Copy introduction text">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" />
+                                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                            </svg>
+                        </button>
+                        <a class="action-btn" id="source-link" href="#" target="_blank" rel="noopener noreferrer"
+                            title="View on Dorar.net" aria-label="Open source on Dorar.net">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+                                <polyline points="15 3 21 3 21 9" />
+                                <line x1="10" y1="14" x2="21" y2="3" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="content-divider"></div>
+                <div class="introduction-section">
+                    <h3 class="section-label">Introduction of Sura</h3>
+                    <!-- Tabs Navigation -->
+                    <div class="content-tabs">
+                        <button class="tab-btn active" data-tab="th" id="tab-th-btn">
+                            <span class="tab-icon">TH</span> ภาษาไทย
+                        </button>
+                        <button class="tab-btn" data-tab="en">
+                            <span class="tab-icon">EN</span> English
+                        </button>
+                        <div class="tab-indicator"></div>
+                    </div>
+
+                    <!-- Introduction Content Areas -->
+                    <div class="introduction-container">
+                        <div id="introduction-text-th" class="introduction-text active" dir="ltr">
+                            <!-- Thai content loads here -->
+                            <div class="translation-placeholder">
+                                <div class="loader-dots"><span></span><span></span><span></span></div>
+                                <p>กำลังแปลเป็นภาษาไทย...</p>
+                            </div>
+                        </div>
+                        <div id="introduction-text-en" class="introduction-text" dir="ltr">
+                            <!-- English content loads here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="content-footer">
+                    <span>Source: <a href="https://dorar.net/en/tafseer/" target="_blank"
+                            rel="noopener noreferrer">Dorar.net — The overall tafseer of Quran</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
