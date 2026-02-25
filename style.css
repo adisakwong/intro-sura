@@ -720,6 +720,7 @@ a:hover {
   background: var(--accent);
   border-radius: 50%;
   animation: dot-pulse 1.4s infinite ease-in-out both;
+  box-shadow: 0 0 10px var(--accent);
 }
 
 .loader-dots span:nth-child(1) {
@@ -955,4 +956,87 @@ a:hover {
     padding: 8px 4px;
     font-size: 0.8rem;
   }
+}
+
+/* ===========================
+   New Animations & Footer
+   =========================== */
+
+/* Pulsing & Shimmer Effect for Translation Loading */
+.translation-placeholder p {
+  display: inline-block;
+  background: linear-gradient(90deg,
+      var(--text-dim) 0%,
+      var(--text) 50%,
+      var(--text-dim) 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation:
+    textShimmer 2s infinite linear,
+    textPulse 1.5s infinite ease-in-out;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+@keyframes textShimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes textPulse {
+
+  0%,
+  100% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+/* Premium App Footer */
+.app-footer {
+  margin-top: 5rem;
+  padding: 3rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-content {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+
+.app-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.footer-content p {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+
+.footer-credit {
+  font-size: 0.75rem !important;
+  opacity: 0.5;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }

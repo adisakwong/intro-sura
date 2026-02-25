@@ -202,7 +202,7 @@ async function translateToThai() {
   introductionTextTh.innerHTML = `
     <div class="translation-placeholder">
       <div class="loader-dots"><span></span><span></span><span></span></div>
-      <p>กำลังแปลเป็นภาษาไทยโดย AI...</p>
+      <p>กำลังแปลเป็นภาษาไทย...</p>
     </div>
   `;
 
