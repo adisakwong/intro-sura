@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thai Intro Sura Viewer | Dorar.net</title>
     <meta name="description"
-        content="Browse Introduction of Sura from Dorar.net Tafseer — a beautiful viewer for all 114 Quranic Sura introductions." />
+        content="Browse Intro-Summary of Sura from Multi-Source Tafseer — a beautiful viewer for all 114 Quranic Sura intro-summary." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -47,18 +47,21 @@
                 </svg>
             </div>
             <div class="header-text">
-                <h1><span class="gradient-text">Thai Intro Sura</span> Viewer</h1>
-                <p class="header-subtitle">Introduction of Quran Sura · Dorar.net Tafseer</p>
+                <h1><span class="gradient-text">Thai Intro-Summary</span> Viewer</h1>
+                <p class="header-subtitle">Intro & Summary of Quran Surah · Multi-Source Explorer</p>
             </div>
         </header>
 
         <!-- Controls Card -->
         <div class="controls-card">
+            <!-- Source Selection -->
             <div class="select-wrapper">
-                <label for="sura-select" class="select-label">Select Sura</label>
+                <label for="source-select" class="select-label">Content Source</label>
                 <div class="custom-select-wrap">
-                    <select id="sura-select" aria-label="Choose a Sura">
-                        <option value="" disabled selected>— Choose a Sura —</option>
+                    <select id="source-select" aria-label="Choose a source">
+                        <option value="quran_com_ashur">Quran.com (Ibn Ashur)</option>
+                        <option value="quran_com_maududi">Quran.com (A. Maududi)</option>
+                        <option value="dorar">Dorar.net (Intro)</option>
                     </select>
                     <span class="select-arrow" aria-hidden="true">
                         <svg viewBox="0 0 20 20" fill="currentColor">
@@ -69,6 +72,23 @@
                     </span>
                 </div>
             </div>
+
+            <div class="select-wrapper">
+                <label for="sura-select" class="select-label">Select Surah</label>
+                <div class="custom-select-wrap">
+                    <select id="sura-select" aria-label="Choose a Sura">
+                        <option value="" disabled selected>— Choose a Surah —</option>
+                    </select>
+                    <span class="select-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </div>
+            </div>
+
             <button id="fetch-btn" class="fetch-btn" disabled>
                 <span class="btn-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
@@ -77,7 +97,7 @@
                         <circle cx="12" cy="12" r="3" />
                     </svg>
                 </span>
-                <span class="btn-text">Show Introduction</span>
+                <span class="btn-text">Show Intro-Summary</span>
             </button>
         </div>
 
@@ -102,8 +122,8 @@
                         </defs>
                     </svg>
                 </div>
-                <p class="placeholder-text">Select a Sura above and click <strong>Show Introduction</strong> to view its
-                    introduction.</p>
+                <p class="placeholder-text">Select a Source and Surah above and click <strong>Show
+                        Intro-Summary</strong> to view its details.</p>
             </div>
 
             <!-- Loading state -->
@@ -158,7 +178,7 @@
                 </div>
                 <div class="content-divider"></div>
                 <div class="introduction-section">
-                    <h3 class="section-label">Introduction of Sura</h3>
+                    <h3 class="section-label">Intro-Summary of Surah</h3>
                     <!-- Tabs Navigation -->
                     <div class="content-tabs">
                         <button class="tab-btn active" data-tab="th" id="tab-th-btn">
@@ -194,8 +214,8 @@
 
     <footer class="app-footer">
         <div class="footer-content">
-            <p>&copy; Copyright, 2026 · Thai Intro Sura Viewer</p>
-            <p class="footer-credit">Built with ❤️ for the Ummah</p>
+            <p>&copy; Copyright, 2026 · Thai Intro-Summary of Surah Viewer</p>
+            <p class="footer-credit">Built with ❤️ by Tech for Ummah</p>
         </div>
     </footer>
 

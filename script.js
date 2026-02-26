@@ -22,6 +22,35 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbyOKC9QrNWlrbCoQCrKcFsT
 
 // Detect if running on localhost to prioritize local proxy
 const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+const SOURCE_CONFIG = {
+  dorar: {
+    name: "Dorar.net (Intro)",
+    urlTemplate: (sura) => `https://dorar.net/en/tafseer/${sura.id}`,
+    isApi: false,
+    label: "View on Dorar.net",
+    footerPrefix: "Source: Dorar.net — The overall tafseer of Quran",
+    footerUrl: "https://dorar.net/en/tafseer/"
+  },
+  quran_com_ashur: {
+    name: "Quran.com (Ibn Ashur)",
+    urlTemplate: (sura) => `https://quran.com/api/proxy/content/api/qdc/chapters/${sura.num}/info?language=en&resource_id=1030&include_resources=true`,
+    isApi: true,
+    label: "View on Quran.com",
+    webUrl: (sura) => `https://quran.com/surah/${sura.num}/info`,
+    footerPrefix: "Source: Quran.com — Adapted from Tafsir Ibn Ashur",
+    footerUrl: "https://quran.com/surah/1/info"
+  },
+  quran_com_maududi: {
+    name: "Quran.com (A. Maududi)",
+    urlTemplate: (sura) => `https://quran.com/api/proxy/content/api/qdc/chapters/${sura.num}/info?language=en&resource_id=58&include_resources=true`,
+    isApi: true,
+    label: "View on Quran.com",
+    webUrl: (sura) => `https://quran.com/surah/${sura.num}/info`,
+    footerPrefix: "Source: Quran.com — Adapted from Tafsir A. Maududi",
+    footerUrl: "https://quran.com/surah/1/info"
+  }
+};
 // ─────────────────────────────────────────────
 //  Sura Data (114 Suras)
 // ─────────────────────────────────────────────
@@ -146,6 +175,7 @@ const SURAS = [
 //  DOM References
 // ─────────────────────────────────────────────
 const suraSelect = document.getElementById('sura-select');
+const sourceSelect = document.getElementById('source-select');
 const fetchBtn = document.getElementById('fetch-btn');
 const placeholderState = document.getElementById('placeholder-state');
 const loadingState = document.getElementById('loading-state');
@@ -291,7 +321,7 @@ async function fetchPage(dorarUrl) {
 }
 
 // ─────────────────────────────────────────────
-//  Extract "Introduction of Sura" — returns raw innerHTML
+//  Extract "Intro-Summary of Sura" — returns raw innerHTML
 //
 //  Real dorar.net HTML structure:
 //  <p class="card-text">
@@ -332,7 +362,7 @@ function extractIntroduction(html) {
 
   // Fallback for different page structures
   for (const el of doc.querySelectorAll('h6, h5, h4, strong')) {
-    if (el.textContent.trim().toLowerCase().includes('introduction of sura')) {
+    if (el.textContent.trim().toLowerCase().includes('intro-Summary of sura')) {
       let parent = el.parentElement;
       for (let d = 0; d < 8 && parent; d++, parent = parent.parentElement) {
         const ct = parent.querySelector('p.card-text');
@@ -351,7 +381,7 @@ function extractIntroduction(html) {
   }
 
   throw new Error(
-    'Could not extract the Introduction of Sura section.\n' +
+    'Could not extract the Intro-Summary of Sura section.\n' +
     'Please make sure the local proxy server (server.js) is running.'
   );
 }
@@ -488,14 +518,31 @@ async function loadIntroduction() {
 
   const sura = SURAS[num - 1];
   currentSuraNum = num;
-  const dorarUrl = `https://dorar.net/en/tafseer/${sura.id}`;
+
+  const selectedSourceKey = sourceSelect.value || 'dorar';
+  const config = SOURCE_CONFIG[selectedSourceKey];
+  const url = config.urlTemplate(sura);
 
   showState('loading');
   fetchBtn.disabled = true;
 
   try {
-    const html = await fetchPage(dorarUrl);
-    const intro = extractIntroduction(html);
+    let intro = '';
+    let finalSourceUrl = url;
+
+    if (config.isApi) {
+      const data = await fetchApi(url);
+      intro = data.chapter_info ? data.chapter_info.text : '';
+      if (!intro) throw new Error('Could not find introduction text in API response.');
+      finalSourceUrl = config.webUrl ? config.webUrl(sura) : url;
+      // Wrap in a div to match extraction logic expectations if needed
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = intro;
+      intro = sanitizeAndAdaptHtml(tempDiv);
+    } else {
+      const html = await fetchPage(url);
+      intro = extractIntroduction(html);
+    }
 
     // Populate content — render as HTML to preserve full formatting
     contentBadge.textContent = sura.num;
@@ -510,9 +557,17 @@ async function loadIntroduction() {
     introductionTextTh.dataset.translatedFor = ''; // Reset cache
 
     tabBtns.forEach(b => b.classList.remove('active'));
-    tabBtns[0].classList.add('active'); // Set Thai as active tab (Thai is first in HTML now)
+    tabBtns[0].classList.add('active'); // Set Thai as active tab
 
-    sourceLink.href = dorarUrl;
+    sourceLink.href = finalSourceUrl;
+    sourceLink.title = config.label;
+    sourceLink.setAttribute('aria-label', config.label);
+
+    // Update footer link
+    const footerSpan = document.querySelector('.content-footer span');
+    if (footerSpan) {
+      footerSpan.innerHTML = `${config.footerPrefix}: <a href="${config.footerUrl}" target="_blank" rel="noopener noreferrer">${config.name}</a>`;
+    }
 
     showState('content');
     contentArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -526,6 +581,20 @@ async function loadIntroduction() {
     showState('error');
   } finally {
     fetchBtn.disabled = false;
+  }
+}
+
+async function fetchApi(apiUrl) {
+  // Use proxies for API too if needed, or just direct fetch if it has CORS
+  // Quran.com API usually has CORS, but let's be safe.
+  try {
+    const res = await fetch(apiUrl);
+    if (res.ok) return await res.json();
+    throw new Error(`API Error: ${res.status}`);
+  } catch (e) {
+    // If direct fetch fails, try proxies
+    const text = await fetchPage(apiUrl);
+    return JSON.parse(text);
   }
 }
 
@@ -553,13 +622,17 @@ copyBtn.addEventListener('click', async () => {
   const activeIntro = document.querySelector('.introduction-text.active');
   const plainBody = getPlainText(activeIntro.innerHTML);
 
+  const selectedSourceKey = sourceSelect.value || 'dorar';
+  const config = SOURCE_CONFIG[selectedSourceKey];
+  const finalUrl = config.webUrl ? config.webUrl(sura) : config.urlTemplate(sura);
+
   const fullText = [
-    `${sura.name} — Introduction of Sura`,
+    `${sura.name} — ${config.name}`,
     `${sura.arabic}`,
     '',
     plainBody,
     '',
-    `Source: https://dorar.net/en/tafseer/${sura.id}`,
+    `Source: ${finalUrl}`,
   ].join('\n');
 
   try {

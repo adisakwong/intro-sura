@@ -237,7 +237,8 @@ a:hover {
   position: relative;
 }
 
-#sura-select {
+#sura-select,
+#source-select {
   width: 100%;
   appearance: none;
   background: var(--bg-input);
@@ -253,12 +254,15 @@ a:hover {
 }
 
 #sura-select:hover,
-#sura-select:focus {
+#sura-select:focus,
+#source-select:hover,
+#source-select:focus {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
 }
 
-#sura-select option {
+#sura-select option,
+#source-select option {
   background: #1a2033;
   color: var(--text);
   padding: 8px;
